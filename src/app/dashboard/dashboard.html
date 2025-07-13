@@ -1,0 +1,55 @@
+<div class="container">
+    <header class="topo">
+        <h1>Minhas Contas</h1>
+        <div class="icones">
+            <button title="Gráfico">📊</button>
+            <button title="Buscar">🔍</button>
+            <button title="Mais opções">⋮</button>
+        </div>
+    </header>
+
+    <router-outlet></router-outlet>
+
+    <nav class="navegacao">
+        <button (click)="selecionarMes('JUN/25')" [class.ativo]="mesSelecionado === 'JUN/25'">JUN/25</button>
+        <button (click)="selecionarMes('JUL/25')" [class.ativo]="mesSelecionado === 'JUL/25'">JUL/25</button>
+        <button (click)="selecionarMes('AGO/25')" [class.ativo]="mesSelecionado === 'AGO/25'">AGO/25</button>
+        <button disabled style="opacity: 0.4;">SET/25</button>
+    </nav>
+
+    <!-- RECEITAS -->
+    <section class="bloco receitas">
+        <h2>RECEITAS <span>{{ dados.receitas }}</span></h2>
+        <p><span>Receitas recebidas</span><span>{{ dados.recebidas | currency:'BRL' }}</span></p>
+        <p><span>Receitas a receber</span><span>{{ dados.aReceber | currency:'BRL' }}</span></p>
+    </section>
+
+    <!-- DESPESAS -->
+    <section class="bloco despesas" routerLink="/despesas">
+        <h2>DESPESAS <span>{{ dados.despesas | currency:'BRL' }}</span></h2>
+        <p><span>Despesas pagas</span><span>{{ dados.pagas | currency:'BRL' }}</span></p>
+        <p><span>Despesas a pagar</span><span>{{ dados.aPagar | currency:'BRL' }}</span></p>
+        <p><span>Despesas fixas</span><span>{{ dados.despesasFixas | currency:'BRL' }}</span></p>
+        <p><span>Despesas variáveis</span><span>{{ dados.despesasVariaveis | currency:'BRL' }}</span></p>
+        <p><span>Cartão de crédito</span><span>{{ dados.cartaoCredito | currency:'BRL' }}</span></p>
+        <p><span>Prestações</span><span>{{ dados.prestacoes | currency:'BRL' }}</span></p>
+    </section>
+
+    <!-- APLICAÇÕES -->
+    <section class="bloco aplicacoes">
+        <h2>APLICAÇÕES <span>{{ dados.aplicacoes | currency:'BRL' }}</span></h2>
+        <p><span>Investimentos</span><span>{{ dados.investimentos | currency:'BRL' }}</span></p>
+        <p><span>Poupanças</span><span>{{ dados.poupancas | currency:'BRL' }}</span></p>
+        <p><span>Previdência</span><span>{{ dados.previdencia | currency:'BRL' }}</span></p>
+    </section>
+
+    <!-- SALDO -->
+    <section class="bloco saldo">
+        <h2>SALDO ATUAL <span>{{ dados.saldo | currency:'BRL' }}</span></h2>
+        <p><span>Saldo mês atual</span><span>{{ dados.saldoAtual | currency:'BRL' }}</span></p>
+        <p><span>Saldo mês anterior</span><span>{{ dados.saldoAnterior | currency:'BRL' }}</span></p>
+    </section>
+
+    <!-- BOTÃO FLUTUANTE -->
+    <button class="botao-flutuante">+</button>
+</div>
