@@ -18,7 +18,7 @@
     </nav>
 
     <!-- RECEITAS -->
-    <section class="bloco receitas">
+    <section class="bloco receitas" routerLink="/receitas">
         <h2>RECEITAS <span>{{ dados.receitas }}</span></h2>
         <p><span>Receitas recebidas</span><span>{{ dados.recebidas | currency:'BRL' }}</span></p>
         <p><span>Receitas a receber</span><span>{{ dados.aReceber | currency:'BRL' }}</span></p>
@@ -33,14 +33,6 @@
         <p><span>Despesas variáveis</span><span>{{ dados.despesasVariaveis | currency:'BRL' }}</span></p>
         <p><span>Cartão de crédito</span><span>{{ dados.cartaoCredito | currency:'BRL' }}</span></p>
         <p><span>Prestações</span><span>{{ dados.prestacoes | currency:'BRL' }}</span></p>
-    </section>
-
-    <!-- APLICAÇÕES -->
-    <section class="bloco aplicacoes">
-        <h2>APLICAÇÕES <span>{{ dados.aplicacoes | currency:'BRL' }}</span></h2>
-        <p><span>Investimentos</span><span>{{ dados.investimentos | currency:'BRL' }}</span></p>
-        <p><span>Poupanças</span><span>{{ dados.poupancas | currency:'BRL' }}</span></p>
-        <p><span>Previdência</span><span>{{ dados.previdencia | currency:'BRL' }}</span></p>
     </section>
 
     <!-- SALDO -->

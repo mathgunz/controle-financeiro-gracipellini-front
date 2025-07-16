@@ -1,0 +1,32 @@
+<div class="container">
+  <header class="header">
+    <button class="back">&larr;</button>
+    <h1>RECEITAS</h1>
+    <div class="icons">
+      <span class="icon">&#x2630;</span>
+      <span class="icon">&#x1F50D;</span>
+    </div>
+    <div class="total">R$ {{ total }}</div>
+  </header>
+
+  <nav class="tabs">
+    <span>MAI/25</span>
+    <span class="active">JUN/25</span>
+    <span>JUL/25</span>
+  </nav>
+
+  <main>
+    <div class="despesa" *ngFor="let item of despesas">
+      <div class="data">{{ item.data }}</div>
+      <div class="info">
+        <div>
+          <div class="titulo">{{ item.titulo }}</div>
+          <div class="descricao">{{ item.descricao }}</div>
+        </div>
+        <div class="valor">R$ {{ item.valor }}</div>
+      </div>
+    </div>
+  </main>
+
+  <button class="fab">+</button>
+</div>
