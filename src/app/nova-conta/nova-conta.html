@@ -1,4 +1,5 @@
 <div class="nova-conta-container">
+
   <header class="header-vermelho">
     <button class="btn-fechar">✕</button>
     <span class="btn-criar">CRIAR</span>
@@ -11,11 +12,13 @@
 
     <!-- Valor e Data -->
     <div class="linha-valor-data">
+
       <input type="number" placeholder="Valor R$" class="input-text" [(ngModel)]="novaConta.valor" name="valor" />
-      
-      <button type="button" class="btn-data" (click)="abrirCalendario()">
-        📅 {{ novaConta.data | date:'dd/MM/yyyy' }}
-      </button>
+
+      <input type="text" mask="d0/M0/0000" placeholder="dd/mm/aaaa" [(ngModel)]="novaConta.dataTexto" name="data"
+        class="input-text" />
+
+
     </div>
 
     <!-- Tipo da conta -->
