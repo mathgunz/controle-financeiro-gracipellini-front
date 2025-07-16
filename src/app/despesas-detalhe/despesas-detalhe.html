@@ -16,7 +16,7 @@
   </nav>
 
   <main>
-    <div class="despesa" *ngFor="let item of despesas">
+    <div class="despesa" *ngFor="let item of despesas" (click)="abrirModal(item)">>
       <div class="data">{{ item.data }}</div>
       <div class="info">
         <div>
@@ -28,5 +28,9 @@
     </div>
   </main>
 
+  <app-modal-opcoes *ngIf="mostrarModal" (escolha)="aoSelecionarOpcao($event)">
+  </app-modal-opcoes>
+
   <button class="fab">+</button>
+
 </div>

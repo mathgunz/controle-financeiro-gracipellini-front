@@ -12,7 +12,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class NovaConta {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    const state = this.router.getCurrentNavigation()?.extras?.state;
+    if (state?.['conta']) {
+      this.novaConta = state['conta'];
+    }
+  }
 
   irParaNovaConta() {
     this.router.navigate(['/nova-conta']);

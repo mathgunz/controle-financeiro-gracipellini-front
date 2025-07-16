@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { NovaConta } from '../nova-conta/nova-conta';
 
 type Mes = 'JUN/25' | 'JUL/25' | 'AGO/25';
 
@@ -12,9 +13,9 @@ type Mes = 'JUN/25' | 'JUL/25' | 'AGO/25';
   imports: [CurrencyPipe, RouterModule]
 })
 export class Dashboard {
-  
-  constructor(private router: Router) {}
 
+  constructor(private router: Router) { }
+  
   navegarParaDetalheDespesas() {
     this.router.navigate(['/despesas']);
   }
