@@ -1,0 +1,76 @@
+<div class="nova-conta-container">
+  <header class="header-vermelho">
+    <button class="btn-fechar">✕</button>
+    <span class="btn-criar">CRIAR</span>
+  </header>
+
+  <form class="formulario">
+
+    <!-- Nome -->
+    <input type="text" placeholder="Nome da conta" class="input-text" [(ngModel)]="novaConta.nome" name="nome" />
+
+    <!-- Valor e Data -->
+    <div class="linha-valor-data">
+      <input type="number" placeholder="Valor R$" class="input-text" [(ngModel)]="novaConta.valor" name="valor" />
+      
+      <button type="button" class="btn-data" (click)="abrirCalendario()">
+        📅 {{ novaConta.data | date:'dd/MM/yyyy' }}
+      </button>
+    </div>
+
+    <!-- Tipo da conta -->
+    <div class="radio-tipo">
+      <label><input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="receita" /> Receita</label>
+      <label><input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="despesa" /> Despesa</label>
+      <label><input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="aplicacao" /> Aplicação</label>
+    </div>
+
+    <!-- Tipo da transação -->
+    <label class="label-select">Escolha um tipo</label>
+    <select class="select" [(ngModel)]="novaConta.tipoTransacao" name="tipoTransacao">
+      <option value="">Selecione</option>
+      <option>Cartão de crédito</option>
+      <option>Despesa fixa</option>
+      <option>Despesa variável</option>
+      <option>Prestação</option>
+    </select>
+
+    <!-- Categoria -->
+    <label class="label-select">Escolha categoria</label>
+    <select class="select" [(ngModel)]="novaConta.categoria" name="categoria">
+      <option>Alimentação</option>
+      <option>Educação</option>
+      <option>Lazer</option>
+      <option>Moradia</option>
+      <option>Saúde</option>
+      <option>Transporte</option>
+      <option>Vestuário</option>
+      <option>Outros</option>
+    </select>
+
+    <!-- Checkboxes -->
+    <div class="checkboxes">
+      <label><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Conta paga</label>
+      <label><input type="checkbox" [(ngModel)]="novaConta.parcelado" name="parcelado" /> Parcelar valor</label>
+    </div>
+
+    <!-- Repetição -->
+    <div class="linha-repeticao">
+      <select class="select" [(ngModel)]="novaConta.repetir" name="repetir">
+        <option>Mensalmente</option>
+        <option>Semanalmente</option>
+        <option>Anualmente</option>
+      </select>
+      <input type="number" placeholder="Qtde" class="input-number" [(ngModel)]="novaConta.qtd" name="qtd" />
+    </div>
+
+    <!-- Juros -->
+    <input type="number" placeholder="Valor juros %" class="input-text" [(ngModel)]="novaConta.juros" name="juros" />
+
+    <!-- Lembrete -->
+    <label class="checkbox-lembrete">
+      <input type="checkbox" [(ngModel)]="novaConta.lembrete" name="lembrete" />
+      Adicionar lembrete
+    </label>
+  </form>
+</div>
