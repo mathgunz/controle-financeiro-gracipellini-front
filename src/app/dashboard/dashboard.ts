@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { NovaConta } from '../nova-conta/nova-conta';
 
-type Mes = 'JUN/25' | 'JUL/25' | 'AGO/25';
+type Mes = 'JUL/25' | 'AGO/25' | 'SET/25';
 
 @Component({
   selector: 'app-root',
@@ -14,15 +13,15 @@ type Mes = 'JUN/25' | 'JUL/25' | 'AGO/25';
 })
 export class Dashboard {
 
-  constructor(private router: Router) { }
-  
-  navegarParaDetalheDespesas() {
+  public mesSelecionado: Mes = 'JUL/25';
+  public dados: DadosFinanceiros = this.getMock(this.mesSelecionado);
+
+  public constructor(private router: Router) { }
+
+  public navegarParaDetalheDespesas() {
     this.router.navigate(['/despesas']);
   }
-  mesSelecionado: Mes = 'JUL/25';
-
-  dados: DadosFinanceiros = this.getMock(this.mesSelecionado);
-
+  
   selecionarMes(mes: Mes) {
     this.mesSelecionado = mes;
     this.dados = this.getMock(mes);
@@ -31,7 +30,7 @@ export class Dashboard {
 
   private getMock(mes: Mes): DadosFinanceiros {
     const mocks: Record<Mes, DadosFinanceiros> = {
-      'JUN/25': {
+      'JUL/25': {
         receitas: 1500, recebidas: 1200, aReceber: 300,
         despesas: 1000, pagas: 700, aPagar: 300,
         despesasFixas: 400, despesasVariaveis: 300,
@@ -39,7 +38,7 @@ export class Dashboard {
         aplicacoes: 500, investimentos: 300, poupancas: 100, previdencia: 100,
         saldo: 500, saldoAtual: 500, saldoAnterior: 400
       },
-      'JUL/25': {
+      'AGO/25': {
         receitas: 2500, recebidas: 2000, aReceber: 500,
         despesas: 1800, pagas: 1600, aPagar: 200,
         despesasFixas: 600, despesasVariaveis: 500,
@@ -47,7 +46,7 @@ export class Dashboard {
         aplicacoes: 700, investimentos: 400, poupancas: 200, previdencia: 100,
         saldo: 700, saldoAtual: 700, saldoAnterior: 500
       },
-      'AGO/25': {
+      'SET/25': {
         receitas: 1800, recebidas: 1000, aReceber: 800,
         despesas: 1200, pagas: 1000, aPagar: 200,
         despesasFixas: 500, despesasVariaveis: 300,
