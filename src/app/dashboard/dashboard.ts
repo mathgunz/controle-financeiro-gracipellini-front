@@ -49,12 +49,12 @@ export class Dashboard implements OnInit {
           this.resumoAPI = resumoData[0];
           this.dados = this.mapearResumoParaDados(this.resumoAPI);
         } else {
-          this.dados = this.getMock(this.mesSelecionado);
+          //this.dados = this.getMock(this.mesSelecionado);
         }
       },
       error: (error) => {
         console.error('Erro ao carregar resumo:', error);
-        this.dados = this.getMock(this.mesSelecionado);
+        //this.dados = this.getMock(this.mesSelecionado);
       }
     });
   }
@@ -118,75 +118,7 @@ export class Dashboard implements OnInit {
 
   public selecionarMes(mes: Mes) {
     this.mesSelecionado = mes;
-    this.dados = this.getMock(mes);
     console.log(this.dados);
-  }
-
-  private getMock(mes: Mes): DadosFinanceiros {
-    const mocks: Record<Mes, DadosFinanceiros> = {
-      'JAN/26': {
-        receitas: 1800, recebidas: 1600, aReceber: 200,
-        despesas: 1200, pagas: 1000, aPagar: 200,
-        saldo: 600, saldoAtual: 600, saldoAnterior: 500
-      },
-      'FEV/26': {
-        receitas: 1900, recebidas: 1700, aReceber: 200,
-        despesas: 1300, pagas: 1100, aPagar: 200,
-        saldo: 600, saldoAtual: 600, saldoAnterior: 600
-      },
-      'MAR/26': {
-        receitas: 2100, recebidas: 1900, aReceber: 200,
-        despesas: 1400, pagas: 1200, aPagar: 200,
-        saldo: 700, saldoAtual: 700, saldoAnterior: 600
-      },
-      'ABR/26': {
-        receitas: 1700, recebidas: 1500, aReceber: 200,
-        despesas: 1100, pagas: 900, aPagar: 200,
-        saldo: 600, saldoAtual: 600, saldoAnterior: 700
-      },
-      'MAI/26': {
-        receitas: 2200, recebidas: 2000, aReceber: 200,
-        despesas: 1500, pagas: 1300, aPagar: 200,
-        saldo: 700, saldoAtual: 700, saldoAnterior: 600
-      },
-      'JUN/26': {
-        receitas: 2000, recebidas: 1800, aReceber: 200,
-        despesas: 1500, pagas: 1200, aPagar: 300,
-        saldo: 500, saldoAtual: 500, saldoAnterior: 300
-      },
-      'JUL/26': {
-        receitas: 1500, recebidas: 1200, aReceber: 300,
-        despesas: 1000, pagas: 700, aPagar: 300,
-        saldo: 500, saldoAtual: 500, saldoAnterior: 400
-      },
-      'AGO/26': {
-        receitas: 2500, recebidas: 2000, aReceber: 500,
-        despesas: 1800, pagas: 1600, aPagar: 200,
-        saldo: 700, saldoAtual: 700, saldoAnterior: 500
-      },
-      'SET/26': {
-        receitas: 1800, recebidas: 1000, aReceber: 800,
-        despesas: 1200, pagas: 1000, aPagar: 200,
-        saldo: 600, saldoAtual: 600, saldoAnterior: 700
-      },
-      'OUT/26': {
-        receitas: 1600, recebidas: 1400, aReceber: 200,
-        despesas: 1100, pagas: 900, aPagar: 200,
-        saldo: 500, saldoAtual: 500, saldoAnterior: 600
-      },
-      'NOV/26': {
-        receitas: 2300, recebidas: 2000, aReceber: 300,
-        despesas: 1600, pagas: 1400, aPagar: 200,
-        saldo: 700, saldoAtual: 700, saldoAnterior: 500
-      },
-      'DEZ/26': {
-        receitas: 2800, recebidas: 2500, aReceber: 300,
-        despesas: 2000, pagas: 1800, aPagar: 200,
-        saldo: 800, saldoAtual: 800, saldoAnterior: 700
-      }
-    };
-
-    return mocks[mes];
   }
 }
 
