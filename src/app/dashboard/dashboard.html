@@ -11,10 +11,13 @@
     <router-outlet></router-outlet>
 
     <nav class="navegacao">
-        <button (click)="selecionarMes('JUL/25')" [class.ativo]="mesSelecionado === 'JUL/25'">JUN/25</button>
-        <button (click)="selecionarMes('AGO/25')" [class.ativo]="mesSelecionado === 'AGO/25'">JUL/25</button>
-        <button (click)="selecionarMes('SET/25')" [class.ativo]="mesSelecionado === 'SET/25'">AGO/25</button>
-        <button disabled style="opacity: 0.4;">OUT/25</button>
+        <button 
+            *ngFor="let mes of meses"
+            (click)="selecionarMes(mes.value)" 
+            [class.ativo]="mesSelecionado === mes.value"
+            [disabled]="mes.disabled">
+            {{ mes.label }}
+        </button>
     </nav>
 
     <!-- RECEITAS -->
@@ -38,7 +41,6 @@
     <section class="bloco saldo">
         <h2>SALDO ATUAL <span>{{ dados.saldo | currency:'BRL' }}</span></h2>
         <p><span>Saldo mês atual</span><span>{{ dados.saldoAtual | currency:'BRL' }}</span></p>
-        <p><span>Saldo mês anterior</span><span>{{ dados.saldoAnterior | currency:'BRL' }}</span></p>
     </section>
 
     <!-- BOTÃO FLUTUANTE -->
