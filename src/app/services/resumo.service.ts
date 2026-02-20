@@ -1,0 +1,38 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface Receita {
+  totalRecebida: number;
+  totalReceber: number;
+}
+
+export interface Despesa {
+  totalPagar: number;
+  totalPaga: number | string;
+}
+
+export interface Saldo {
+  total: number;
+  atual: number;
+}
+
+export interface Resumo {
+  receita: Receita;
+  despesa: Despesa;
+  saldo: Saldo;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ResumoService {
+
+  private readonly API_URL = 'http://localhost:3000/resumo';
+
+  constructor(private http: HttpClient) { }
+
+  obterResumo(): Observable<Resumo[]> {
+    return this.http.get<Resumo[]>(this.API_URL);
+  }
+}
