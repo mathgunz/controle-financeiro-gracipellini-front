@@ -1,76 +1,90 @@
-<div class="nova-conta-container">
+<div class="nova-conta-wrapper">
+  <div class="card">
+    <header class="card-header" [class.header-vermelho]="novaConta.tipo === 'despesa'" [class.header-azul]="novaConta.tipo === 'receita'">
+      <button class="btn-fechar">✕</button>
+      <h3 class="card-title">Nova Conta</h3>
+      <button class="btn-criar">SALVAR</button>
+    </header>
 
-  <header [class.header-vermelho]="novaConta.tipo === 'despesa'" [class.header-azul]="novaConta.tipo === 'receita'">
-    <button class="btn-fechar">✕</button>
-    <span class="btn-criar">CRIAR</span>
-  </header>
+    <form class="formulario">
+      <div class="row">
+        <div class="col-8">
+          <label class="input-label">Nome da conta</label>
+          <input type="text" class="input-text" [(ngModel)]="novaConta.nome" name="nome" placeholder="Ex: Conta de luz" />
+        </div>
+        <div class="col-4">
+          <label class="input-label">Valor</label>
+          <div class="input-group">
+            <span class="input-prefix">R$</span>
+            <input type="text" class="input-text" mask="separator.2" thousandSeparator="." decimalMarker="," placeholder="0,00" [(ngModel)]="novaConta.valor" name="valor" />
+          </div>
+        </div>
+      </div>
 
-  <form class="formulario">
+      <div class="row">
+        <div class="col-6">
+          <label class="input-label">Data</label>
+          <input type="text" mask="d0/M0/0000" class="input-text" placeholder="dd/mm/aaaa" [(ngModel)]="novaConta.dataTexto" name="data" />
+        </div>
+        <div class="col-6">
+          <label class="input-label">Tipo</label>
+          <div class="radio-tipo">
+            <label [class.selected]="novaConta.tipo === 'receita'" (click)="novaConta.tipo='receita'">
+              <input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="receita" /> Receita
+            </label>
+            <label [class.selected]="novaConta.tipo === 'despesa'" (click)="novaConta.tipo='despesa'">
+              <input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="despesa" /> Despesa
+            </label>
+          </div>
+        </div>
+      </div>
 
-    <!-- Nome -->
-    <input type="text" placeholder="Nome da conta" class="input-text" [(ngModel)]="novaConta.nome" name="nome" />
+      <div class="row">
+        <div class="col-6">
+          <label class="input-label">Tipo da transação</label>
+          <select class="select" [(ngModel)]="novaConta.tipoTransacao" name="tipoTransacao">
+            <option value="">Selecione</option>
+            <option>Cartão de crédito</option>
+            <option>Despesa fixa</option>
+            <option>Despesa variável</option>
+            <option>Prestação</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="input-label">Categoria</label>
+          <select class="select" [(ngModel)]="novaConta.categoria" name="categoria">
+            <option value="">Selecione</option>
+            <option>Alimentação</option>
+            <option>Educação</option>
+            <option>Lazer</option>
+            <option>Moradia</option>
+            <option>Saúde</option>
+            <option>Transporte</option>
+            <option>Vestuário</option>
+            <option>Outros</option>
+          </select>
+        </div>
+      </div>
 
-    <!-- Valor e Data -->
-    <div class="linha-valor-data">
+      <div class="row small-gap">
+        <div class="col-6">
+          <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Conta paga</label>
+        </div>
+        <div class="col-6">
+          <label class="input-label">Repetir</label>
+          <select class="select" [(ngModel)]="novaConta.repetir" name="repetir">
+            <option value="">Não</option>
+            <option>Mensalmente</option>
+            <option>Semanalmente</option>
+            <option>Anualmente</option>
+          </select>
+        </div>
+      </div>
 
-      <input type="number" placeholder="Valor R$" class="input-text" [(ngModel)]="novaConta.valor" name="valor" />
-
-      <input type="text" mask="d0/M0/0000" placeholder="dd/mm/aaaa" [(ngModel)]="novaConta.dataTexto" name="data"
-        class="input-text" />
-
-
-    </div>
-
-    <!-- Tipo da conta -->
-    <div class="radio-tipo">
-      <label [class.selected]="novaConta.tipo === 'receita'" (click)="novaConta.tipo='receita'">
-        <input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="receita" /> Receita
-      </label>
-      <label [class.selected]="novaConta.tipo === 'despesa'" (click)="novaConta.tipo='despesa'">
-        <input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="despesa" /> Despesa
-      </label>
-    </div>
-
-    <!-- Tipo da transação -->
-    <label class="label-select">Escolha um tipo</label>
-    <select class="select" [(ngModel)]="novaConta.tipoTransacao" name="tipoTransacao">
-      <option value="">Selecione</option>
-      <option>Cartão de crédito</option>
-      <option>Despesa fixa</option>
-      <option>Despesa variável</option>
-      <option>Prestação</option>
-    </select>
-
-    <!-- Categoria -->
-    <label class="label-select">Escolha categoria</label>
-    <select class="select" [(ngModel)]="novaConta.categoria" name="categoria">
-      <option value="">Selecione</option>
-      <option>Alimentação</option>
-      <option>Educação</option>
-      <option>Lazer</option>
-      <option>Moradia</option>
-      <option>Saúde</option>
-      <option>Transporte</option>
-      <option>Vestuário</option>
-      <option>Outros</option>
-    </select>
-
-    <!-- Checkboxes -->
-    <div class="checkboxes">
-      <label><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Conta paga</label>
-    </div>
-
-    <label class="label-select">Repetir Conta</label>
-    <!-- Repetição -->
-    <div class="linha-repeticao">
-      <select class="select" [(ngModel)]="novaConta.repetir" name="repetir">
-        <option value="">Selecione</option>
-        <option>Mensalmente</option>
-        <option>Semanalmente</option>
-        <option>Anualmente</option>
-      </select>
-    </div>
-    <label class="label-select">Quantidade</label>
-    <input type="number" placeholder="Qtde" class="input-number" [(ngModel)]="novaConta.qtd" name="qtd" />
-  </form>
+      <div class="form-actions">
+       
+        <button type="button" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
 </div>

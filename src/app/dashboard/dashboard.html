@@ -1,7 +1,13 @@
 <div class="container">
     <header class="topo">
-        <h1>Minhas Contas</h1>
-        <div class="icones">
+        <div class="top-left">
+            <h1>Minhas Contas</h1>
+            <nav class="navegacao">
+                <button *ngFor="let mes of meses" (click)="selecionarMes(mes.value)" [class.ativo]="mesSelecionado === mes.value" [disabled]="mes.disabled">{{ mes.label }}</button>
+            </nav>
+        </div>
+
+        <div class="top-right icones">
             <button title="Gráfico">📊</button>
             <button title="Buscar">🔍</button>
             <button title="Mais opções">⋮</button>
@@ -10,36 +16,34 @@
 
     <router-outlet></router-outlet>
 
-    <nav class="navegacao">
-        <button 
-            *ngFor="let mes of meses"
-            (click)="selecionarMes(mes.value)" 
-            [class.ativo]="mesSelecionado === mes.value"
-            [disabled]="mes.disabled">
-            {{ mes.label }}
-        </button>
-    </nav>
+    <section class="dashboard-grid">
+        <article class="card card-receitas" routerLink="/receitas">
+            <div class="card-head">RECEITAS</div>
+            <div class="card-value">{{ dados.receitas | currency:'BRL' }}</div>
+            <div class="card-meta">
+                <div><small>Recebidas</small><strong>{{ dados.recebidas | currency:'BRL' }}</strong></div>
+                <div><small>A receber</small><strong>{{ dados.aReceber | currency:'BRL' }}</strong></div>
+            </div>
+        </article>
 
-    <!-- RECEITAS -->
-    <section class="bloco receitas" routerLink="/receitas">
-        <h2>RECEITAS <span>{{ dados.receitas }}</span></h2>
-        <p><span>Receitas recebidas</span><span>{{ dados.recebidas | currency:'BRL' }}</span></p>
-        <p><span>Receitas a receber</span><span>{{ dados.aReceber | currency:'BRL' }}</span></p>
+        <article class="card card-despesas" routerLink="/despesas">
+            <div class="card-head">DESPESAS</div>
+            <div class="card-value">{{ dados.despesas | currency:'BRL' }}</div>
+            <div class="card-meta">
+                <div><small>Pagas</small><strong>{{ dados.pagas | currency:'BRL' }}</strong></div>
+                <div><small>A pagar</small><strong>{{ dados.aPagar | currency:'BRL' }}</strong></div>
+            </div>
+        </article>
+
+        <article class="card card-saldo">
+            <div class="card-head">SALDO ATUAL</div>
+            <div class="card-value">{{ dados.saldoAtual | currency:'BRL' }}</div>
+            <div class="card-meta">
+                <div><small>Saldo total</small><strong>{{ dados.saldoAtual| currency:'BRL' }}</strong></div>
+                <div><small>Saldo anterior</small><strong>{{ dados.saldoAnterior | currency:'BRL' }}</strong></div>
+            </div>
+        </article>
     </section>
 
-    <!-- DESPESAS -->
-    <section class="bloco despesas" routerLink="/despesas">
-        <h2>DESPESAS <span>{{ dados.despesas | currency:'BRL' }}</span></h2>
-        <p><span>Despesas pagas</span><span>{{ dados.pagas | currency:'BRL' }}</span></p>
-        <p><span>Despesas a pagar</span><span>{{ dados.aPagar | currency:'BRL' }}</span></p>
-    </section>
-
-    <!-- SALDO -->
-    <section class="bloco saldo">
-        <h2>SALDO ATUAL <span>{{ dados.saldoAtual | currency:'BRL' }}</span></h2>
-        <p><span>Saldo mês atual</span><span>{{ dados.saldoMesAtual | currency:'BRL' }}</span></p>
-    </section>
-
-    <!-- BOTÃO FLUTUANTE -->
     <button class="botao-flutuante" routerLink="/nova-conta">+</button>
 </div>
