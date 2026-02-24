@@ -43,7 +43,8 @@ export class Dashboard implements OnInit {
   }
 
   private carregarResumo(): void {
-    this.resumoService.obterResumo().subscribe({
+    const dataFormatada = this.formatarDataParaAPI(this.mesSelecionado);
+    this.resumoService.obterResumo(dataFormatada).subscribe({
       next: (resumoData: Resumo[]) => {
         if (resumoData && resumoData.length > 0) {
           this.resumoAPI = resumoData[0];
@@ -71,8 +72,8 @@ export class Dashboard implements OnInit {
       despesas: resumo.despesa.totalPagar + totalPaga,
       pagas: totalPaga,
       aPagar: resumo.despesa.totalPagar,
-      saldo: resumo.saldo.total,
-      saldoAtual: resumo.saldo.atual,
+      saldoMesAtual: resumo.saldo.saldoMesAtual,
+      saldoAtual: resumo.saldo.saldoAtual,
       saldoAnterior: 0
     };
   }
@@ -85,7 +86,7 @@ export class Dashboard implements OnInit {
       despesas: 0,
       pagas: 0,
       aPagar: 0,
-      saldo: 0,
+      saldoMesAtual: 0,
       saldoAtual: 0,
       saldoAnterior: 0
     };
@@ -111,6 +112,19 @@ export class Dashboard implements OnInit {
     const mesHabilitado = [...this.meses].reverse().find(m => !m.disabled);
     return mesHabilitado?.value || 'FEV/26';
   }
+
+  private formatarDataParaAPI(mes: Mes): string {
+    // Converte 'JAN/26' para '2026-01-01'
+    const mesesMap: { [key: string]: string } = {
+      'JAN': '01', 'FEV': '02', 'MAR': '03', 'ABR': '04',
+      'MAI': '05', 'JUN': '06', 'JUL': '07', 'AGO': '08',
+      'SET': '09', 'OUT': '10', 'NOV': '11', 'DEZ': '12'
+    };
+
+    const [nomeMes, ano] = mes.split('/');
+    const mesNumero = mesesMap[nomeMes];
+    return `20${ano}-${mesNumero}-01`;
+  }
   
   public navegarParaDetalheDespesas() {
     this.router.navigate(['/despesas']);
@@ -119,6 +133,7 @@ export class Dashboard implements OnInit {
   public selecionarMes(mes: Mes) {
     this.mesSelecionado = mes;
     console.log(this.dados);
+    this.carregarResumo();
   }
 }
 
@@ -131,7 +146,7 @@ interface DadosFinanceiros {
   pagas: number;
   aPagar: number;
 
-  saldo: number;
+  saldoMesAtual: number;
   saldoAtual: number;
   saldoAnterior: number;
 }

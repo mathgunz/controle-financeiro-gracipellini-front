@@ -13,8 +13,8 @@ export interface Despesa {
 }
 
 export interface Saldo {
-  total: number;
-  atual: number;
+  saldoMesAtual: number;
+  saldoAtual: number;
 }
 
 export interface Resumo {
@@ -32,7 +32,8 @@ export class ResumoService {
 
   constructor(private http: HttpClient) { }
 
-  obterResumo(): Observable<Resumo[]> {
-    return this.http.get<Resumo[]>(this.API_URL);
+  obterResumo(data?: string): Observable<Resumo[]> {
+    const params = data ? { params: { data } } : {};
+    return this.http.get<Resumo[]>(this.API_URL, params);
   }
 }
