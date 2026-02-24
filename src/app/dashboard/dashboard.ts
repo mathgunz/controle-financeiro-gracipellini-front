@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ResumoService, Resumo } from '../services/resumo.service';
@@ -13,6 +13,10 @@ type Mes = 'JAN/26' | 'FEV/26' | 'MAR/26' | 'ABR/26' | 'MAI/26' | 'JUN/26' | 'JU
   imports: [CommonModule, CurrencyPipe, RouterModule]
 })
 export class Dashboard implements OnInit {
+
+  @ViewChild('navContainer', { static: false }) navContainer!: ElementRef<HTMLElement>;
+
+  public showMesDrop = false;
 
   public meses: Array<{ label: string; value: Mes; disabled: boolean }> = [
     { label: 'JAN/26', value: 'JAN/26', disabled: false },
@@ -132,8 +136,20 @@ export class Dashboard implements OnInit {
 
   public selecionarMes(mes: Mes) {
     this.mesSelecionado = mes;
+    this.showMesDrop = false;
     console.log(this.dados);
     this.carregarResumo();
+  }
+
+  public toggleMesDrop() {
+    this.showMesDrop = !this.showMesDrop;
+  }
+
+  public scrollNav(direction: number) {
+    if (!this.navContainer) return;
+    const el = this.navContainer.nativeElement as HTMLElement;
+    const amount = Math.round(el.clientWidth * 0.5) * direction;
+    el.scrollBy({ left: amount, behavior: 'smooth' });
   }
 }
 

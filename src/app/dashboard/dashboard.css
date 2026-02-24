@@ -20,6 +20,25 @@
 .card-despesas { border-left: 4px solid #f44336 }
 .card-saldo { border-left: 4px solid #9e9e9e }
 
+.nav-wrapper { display:flex; align-items:center; gap:8px }
+.nav-btn { background: rgba(255,255,255,0.04); border:none; color:white; width:34px; height:34px; border-radius:8px; cursor:pointer }
+.mobile-select { display:none; margin-top:6px; background: transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; color:white; border-radius:8px }
+
+/* Month selector */
+.month-selector-wrapper { position: relative; margin-top: 8px }
+.month-selector-btn { background: linear-gradient(90deg, rgba(11,92,255,0.1), rgba(11,92,255,0.05)); border: 1px solid rgba(11,92,255,0.3); padding: 10px 14px; border-radius: 999px; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; min-width: 120px; justify-content: space-between }
+.month-selector-btn:hover { background: linear-gradient(90deg, rgba(11,92,255,0.15), rgba(11,92,255,0.1)) }
+.month-label { font-size: 14px }
+.dropdown-icon { font-size: 12px; transition: transform 180ms ease }
+.dropdown-icon.open { transform: rotateZ(180deg) }
+
+.month-dropdown { position: absolute; top: 100%; left: 0; margin-top: 8px; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.8); display: none; flex-direction: column; z-index: 100; min-width: 140px }
+.month-dropdown.open { display: flex }
+.month-option { background: transparent; border: none; padding: 10px 14px; color: rgba(255,255,255,0.8); text-align: left; cursor: pointer; transition: background 120ms }
+.month-option:hover { background: rgba(11,92,255,0.1) }
+.month-option.selected { background: rgba(11,92,255,0.2); color: white; font-weight: 600 }
+.month-option:disabled { color: rgba(255,255,255,0.3); cursor: not-allowed }
+
 /* Cabeçalho */
 .topo {
   display: flex;
@@ -117,4 +136,6 @@
   .botao-flutuante { width:48px; height:48px; bottom:18px; right:18px; font-size:26px }
   .top-left { gap:8px }
   .navegacao { padding: 8px 0 }
+  .nav-btn { display:none }
+  .mobile-select { display:block }
 }

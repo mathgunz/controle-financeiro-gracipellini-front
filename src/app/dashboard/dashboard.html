@@ -1,10 +1,22 @@
 <div class="container">
-    <header class="topo">
+        <header class="topo">
         <div class="top-left">
             <h1>Minhas Contas</h1>
-            <nav class="navegacao">
-                <button *ngFor="let mes of meses" (click)="selecionarMes(mes.value)" [class.ativo]="mesSelecionado === mes.value" [disabled]="mes.disabled">{{ mes.label }}</button>
-            </nav>
+            <div class="month-selector-wrapper">
+                <button class="month-selector-btn" (click)="toggleMesDrop()">
+                    <span class="month-label">{{ mesSelecionado }}</span>
+                    <span class="dropdown-icon" [class.open]="showMesDrop">▼</span>
+                </button>
+                <div class="month-dropdown" [class.open]="showMesDrop">
+                    <button *ngFor="let mes of meses" 
+                            (click)="selecionarMes(mes.value)"
+                            [disabled]="mes.disabled"
+                            [class.selected]="mesSelecionado === mes.value"
+                            class="month-option">
+                        {{ mes.label }}
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="top-right icones">
