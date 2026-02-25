@@ -5,12 +5,12 @@ import { ModalOpcoes } from "../modal-opcoes/modal-opcoes";
 import { Mes, MesOption, criarMeses, obterMesAtualDisponivel, selecionarMesDisponivel } from '../utils/mes-selector.utils';
 
 @Component({
-  selector: 'app-receitas-detalhe',
-  templateUrl: './receitas-detalhe.html',
+  selector: 'app-despesas',
+  templateUrl: './despesas.html',
   imports: [CommonModule, RouterModule, ModalOpcoes],
-  styleUrls: ['./receitas-detalhe.css']
+  styleUrls: ['./despesas.css']
 })
-export class ReceitasDetalhe {
+export class Despesas {
 
   constructor(private router: Router) { }
 
@@ -39,7 +39,7 @@ export class ReceitasDetalhe {
     this.mostrarModal = true;
   }
 
-    aoSelecionarOpcao(valor: string) {
+  aoSelecionarOpcao(valor: string) {
     this.mostrarModal = false;
 
     // aqui você pode usar um mock ou ir buscar o real
@@ -65,7 +65,7 @@ export class ReceitasDetalhe {
       juros: 0,
       lembrete: false
     };
-    
+
     this.router.navigate(['/nova-conta'], {
       state: { conta: contaMock, tipoEdicao: valor } // tipoEdicao: 'unica' | 'futuras' | 'todas'
     });
@@ -79,5 +79,4 @@ export class ReceitasDetalhe {
     this.mesSelecionado = selecionarMesDisponivel(mes, this.meses, this.mesSelecionado);
     this.showMesDrop = false;
   }
-
 }
