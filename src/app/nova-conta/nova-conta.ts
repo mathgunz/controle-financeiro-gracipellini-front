@@ -26,6 +26,10 @@ export class NovaConta {
     this.router.navigate(['/nova-conta']);
   }
 
+  fecharModal() {
+    this.router.navigate(['']);
+  }
+
   @Input() novaConta = {
     nome: '',
     valor: null,
