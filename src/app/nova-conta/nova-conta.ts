@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { DespesaService, DespesaRequest } from '../services/despesa.service';
+import { ReceitaService, ReceitaRequest } from '../services/receita.service';
 
 @Component({
   selector: 'app-nova-conta',
@@ -15,7 +16,7 @@ import { DespesaService, DespesaRequest } from '../services/despesa.service';
 })
 export class NovaConta {
 
-  constructor(private router: Router, private despesaService: DespesaService) {
+  constructor(private router: Router, private despesaService: DespesaService, private receitaService: ReceitaService) {
     const state = this.router.getCurrentNavigation()?.extras?.state;
     if (state?.['conta']) {
       this.novaConta = state['conta'];
@@ -68,7 +69,7 @@ export class NovaConta {
     if (this.novaConta.tipoConta === 'despesa') {
       this.salvarDespesa();
     } else if (this.novaConta.tipoConta === 'receita') {
-      console.log('Salvando receita - implementar em breve');
+      this.salvarReceita();
     }
   }
 
@@ -112,6 +113,44 @@ export class NovaConta {
       error: (error) => {
         console.error('Erro ao salvar despesa:', error);
         alert('Erro ao salvar despesa. Tente novamente.');
+      }
+    });
+  }
+
+  private salvarReceita(): void {
+    // Validar campos obrigatórios
+    if (!this.novaConta.nome || !this.novaConta.valor || !this.novaConta.dataTexto) {
+      alert('Por favor, preencha todos os campos obrigatórios');
+      return;
+    }
+
+    // Converter data de dd/MM/yyyy para yyyy-MM-dd
+    const dataRecebimento = this.converterDataParaISO(this.novaConta.dataTexto);
+    if (!dataRecebimento) {
+      alert('Data inválida');
+      return;
+    }
+
+    // Construir objeto para enviar à API
+    const receitaRequest: ReceitaRequest = {
+      nome: this.novaConta.nome,
+      valor: Number(this.novaConta.valor),
+      dataRecebimento: dataRecebimento,
+      quantidade: this.novaConta.quantidade || 1,
+      repeticao: this.novaConta.repeticao,
+      hasRecebida: this.novaConta.paga
+    };
+
+    // Fazer chamada POST
+    this.receitaService.salvarReceita(receitaRequest).subscribe({
+      next: (response) => {
+        console.log('Receita salva com sucesso:', response);
+        alert('Receita salva com sucesso!');
+        this.fecharModal();
+      },
+      error: (error) => {
+        console.error('Erro ao salvar receita:', error);
+        alert('Erro ao salvar receita. Tente novamente.');
       }
     });
   }

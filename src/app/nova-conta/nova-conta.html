@@ -83,8 +83,15 @@
         </div>
       </div>
 
-      <div class="col-6">
-        <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Conta paga</label>
+      <div class="row" *ngIf="novaConta.tipoConta !== 'receita'">
+        <div class="col-6">
+          <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Conta paga</label>
+        </div>
+      </div>
+      <div class="row" *ngIf="novaConta.tipoConta === 'receita'">
+        <div class="col-6">
+          <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Recebida</label>
+        </div>
       </div>
 
       <div class="form-actions">
