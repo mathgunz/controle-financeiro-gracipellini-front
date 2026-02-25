@@ -33,16 +33,14 @@ export class NovaConta {
   @Input() novaConta = {
     nome: '',
     valor: null,
-    data: new Date(),
-    tipo: '',
-    tipoTransacao: '',
+    dataPagamento: new Date(),
+    tipoConta: '',
+    tipoPagamento: '',
     categoria: '',
     paga: false,
     parcelado: false,
-    repetir: '',
-    qtd: null,
-    juros: null,
-    lembrete: false,
+    repeticao: '',
+    quantidade: 1,
     dataTexto: ''
   };
 
@@ -65,22 +63,4 @@ export class NovaConta {
     if (!dia || !mes || !ano) return null;
     return new Date(+ano, +mes - 1, +dia);
   }
-}
-
-export class NovaContaComponent {
-  novaConta = {
-    nome: '',
-    valor: null,
-    data: new Date(),
-    tipo: '',
-    tipoTransacao: '',
-    categoria: '',
-    paga: false,
-    parcelado: false,
-    repetir: '',
-    qtd: null,
-    juros: null,
-    lembrete: false,
-    dataTexto: ''
-  };
 }

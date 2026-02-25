@@ -1,6 +1,6 @@
 <div class="nova-conta-wrapper">
   <div class="card">
-    <header class="card-header" [class.header-vermelho]="novaConta.tipo === 'despesa'" [class.header-azul]="novaConta.tipo === 'receita'">
+    <header class="card-header" [class.header-vermelho]="novaConta.tipoConta === 'despesa'" [class.header-azul]="novaConta.tipoConta === 'receita'">
       <button type="button" class="btn-fechar" (click)="fecharModal()">✕</button>
       <h3 class="card-title">Nova Conta</h3>
       <button class="btn-criar">SALVAR</button>
@@ -29,20 +29,20 @@
         <div class="col-6">
           <label class="input-label">Tipo</label>
           <div class="radio-tipo">
-            <label [class.selected]="novaConta.tipo === 'receita'" (click)="novaConta.tipo='receita'">
-              <input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="receita" /> Receita
+            <label [class.selected]="novaConta.tipoConta === 'receita'" (click)="novaConta.tipoConta='receita'">
+              <input type="radio" [(ngModel)]="novaConta.tipoConta" name="tipo" value="receita" /> Receita
             </label>
-            <label [class.selected]="novaConta.tipo === 'despesa'" (click)="novaConta.tipo='despesa'">
-              <input type="radio" [(ngModel)]="novaConta.tipo" name="tipo" value="despesa" /> Despesa
+            <label [class.selected]="novaConta.tipoConta === 'despesa'" (click)="novaConta.tipoConta='despesa'">
+              <input type="radio" [(ngModel)]="novaConta.tipoConta" name="tipo" value="despesa" /> Despesa
             </label>
           </div>
         </div>
       </div>
 
-      <div class="row" *ngIf="novaConta.tipo !== 'receita'">
+      <div class="row" *ngIf="novaConta.tipoConta !== 'receita'">
         <div class="col-6">
           <label class="input-label">Tipo da transação</label>
-          <select class="select" [(ngModel)]="novaConta.tipoTransacao" name="tipoTransacao">
+          <select class="select" [(ngModel)]="novaConta.tipoPagamento" name="tipoPagamento">
             <option value="">Selecione</option>
             <option>Cartão de crédito</option>
             <option>Despesa fixa</option>
@@ -67,17 +67,24 @@
 
       <div class="row small-gap">
         <div class="col-6">
-          <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Conta paga</label>
-        </div>
-        <div class="col-6">
           <label class="input-label">Repetir</label>
-          <select class="select" [(ngModel)]="novaConta.repetir" name="repetir">
-            <option value="">Não</option>
+          <select class="select" [(ngModel)]="novaConta.repeticao" name="repetir">
+            <option value="">Selecione</option>
+            <option>Diariamente</option>
             <option>Mensalmente</option>
             <option>Semanalmente</option>
             <option>Anualmente</option>
           </select>
         </div>
+
+        <div class="col-6">
+          <label class="input-label">Quantidade</label>
+          <input type="number" class="input-text" [(ngModel)]="novaConta.quantidade" name="quantidade" placeholder="0" />
+        </div>
+      </div>
+
+      <div class="col-6">
+        <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="novaConta.paga" name="paga" /> Conta paga</label>
       </div>
 
       <div class="form-actions">
