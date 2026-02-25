@@ -11,6 +11,17 @@ export interface ReceitaRequest {
   hasRecebida: boolean;
 }
 
+export interface ReceitaResponse {
+  id: number;
+  nome: string;
+  valor: string;
+  dataRecebimento: string;
+  hasRecebida: boolean;
+  quantidade: number;
+  repeticao: string;
+  dataCriacao: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,5 +33,11 @@ export class ReceitaService {
 
   salvarReceita(receita: ReceitaRequest): Observable<any> {
     return this.http.post<any>(this.API_URL, receita);
+  }
+
+  listarReceitas(dataRecebimento: string): Observable<ReceitaResponse[]> {
+    return this.http.get<ReceitaResponse[]>(this.API_URL, {
+      params: { dataRecebimento }
+    });
   }
 }

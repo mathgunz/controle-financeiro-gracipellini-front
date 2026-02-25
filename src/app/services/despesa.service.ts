@@ -13,6 +13,20 @@ export interface DespesaRequest {
   repeticao: string;
 }
 
+export interface DespesaResponse {
+  id: number;
+  nome: string;
+  valor: string;
+  dataPagamento: string;
+  tipoPagamento: string;
+  categoria: string;
+  hasContaPaga: boolean;
+  quantidade: number;
+  repeticao: string;
+  dataCriacao: string;
+  numeroParcela: number | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,5 +38,11 @@ export class DespesaService {
 
   salvarDespesa(despesa: DespesaRequest): Observable<any> {
     return this.http.post<any>(this.API_URL, despesa);
+  }
+
+  listarDespesas(dataPagamento: string): Observable<DespesaResponse[]> {
+    return this.http.get<DespesaResponse[]>(this.API_URL, {
+      params: { dataPagamento }
+    });
   }
 }

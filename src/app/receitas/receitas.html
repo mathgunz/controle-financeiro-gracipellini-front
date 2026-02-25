@@ -27,16 +27,16 @@
   <section class="resumo-card">
     <small>Total do mês</small>
     <strong>{{ total | currency:'BRL' }}</strong>
-    <span>{{ despesas.length }} lançamentos</span>
+    <span>{{ receitas.length }} lançamentos</span>
   </section>
 
   <section class="lista-card">
     <div class="lista-head">
       <h2>Lançamentos</h2>
-      <span>{{ despesas.length }} itens</span>
+      <span>{{ receitas.length }} itens</span>
     </div>
 
-    <button class="receita" type="button" *ngFor="let item of despesas" (click)="abrirModal(item)">
+    <button class="receita" type="button" *ngFor="let item of receitas" (click)="abrirModal(item)">
       <div class="data">{{ item.data }}</div>
       <div class="info">
         <div class="texto">

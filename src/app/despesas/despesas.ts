@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ModalOpcoes } from "../modal-opcoes/modal-opcoes";
+import { DespesaResponse, DespesaService } from '../services/despesa.service';
 import { Mes, MesOption, criarMeses, obterMesAtualDisponivel, selecionarMesDisponivel } from '../utils/mes-selector.utils';
 
 @Component({
@@ -10,9 +11,12 @@ import { Mes, MesOption, criarMeses, obterMesAtualDisponivel, selecionarMesDispo
   imports: [CommonModule, RouterModule, ModalOpcoes],
   styleUrls: ['./despesas.css']
 })
-export class Despesas {
+export class Despesas implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private despesaService: DespesaService
+  ) { }
 
   public showMesDrop = false;
   mostrarModal = false;
@@ -30,6 +34,10 @@ export class Despesas {
 
   public mesSelecionado: Mes = obterMesAtualDisponivel(this.meses);
 
+  ngOnInit(): void {
+    this.carregarDespesas();
+  }
+
   get total(): number {
     return this.despesas.reduce((acc, item) => acc + item.valor, 0);
   }
@@ -41,34 +49,7 @@ export class Despesas {
 
   aoSelecionarOpcao(valor: string) {
     this.mostrarModal = false;
-
-    // aqui você pode usar um mock ou ir buscar o real
-    const mock = {
-      ...this.itemSelecionado,
-      tipo: 'despesa',
-      tipoTransacao: 'Despesa fixa',
-      categoria: 'Saúde',
-      paga: true
-    };
-
-    const contaMock = {
-      nome: this.itemSelecionado?.titulo || 'Conta Teste',
-      valor: this.itemSelecionado?.valor || 292.88,
-      data: new Date('2025-07-10'),
-      tipo: 'despesa',
-      tipoTransacao: 'Despesa fixa',
-      categoria: 'Saúde',
-      paga: true,
-      parcelado: false,
-      repetir: 'Mensalmente',
-      qtd: 1,
-      juros: 0,
-      lembrete: false
-    };
-
-    this.router.navigate(['/nova-conta'], {
-      state: { conta: contaMock, tipoEdicao: valor } // tipoEdicao: 'unica' | 'futuras' | 'todas'
-    });
+    this.router.navigate(['/despesas']);
   }
 
   public toggleMesDrop() {
@@ -78,5 +59,47 @@ export class Despesas {
   public selecionarMes(mes: Mes) {
     this.mesSelecionado = selecionarMesDisponivel(mes, this.meses, this.mesSelecionado);
     this.showMesDrop = false;
+    this.carregarDespesas();
+  }
+
+  private carregarDespesas(): void {
+    const dataPagamento = this.formatarDataFiltro(this.mesSelecionado);
+
+    this.despesaService.listarDespesas(dataPagamento).subscribe({
+      next: (despesasApi) => {
+        this.despesas = despesasApi.map((item: DespesaResponse) => ({
+          data: item.dataPagamento,
+          titulo: item.nome,
+          descricao: `${item.tipoPagamento} | ${item.categoria}`,
+          valor: Number(item.valor) || 0
+        }));
+      },
+      error: (error) => {
+        console.error('Erro ao carregar despesas:', error);
+        this.despesas = [];
+      }
+    });
+  }
+
+  private formatarDataFiltro(mes: Mes): string {
+    const [siglaMes, anoCurto] = mes.split('/');
+    const mesesMap: Record<string, string> = {
+      JAN: '01',
+      FEV: '02',
+      MAR: '03',
+      ABR: '04',
+      MAI: '05',
+      JUN: '06',
+      JUL: '07',
+      AGO: '08',
+      SET: '09',
+      OUT: '10',
+      NOV: '11',
+      DEZ: '12'
+    };
+
+    const diaAtual = String(new Date().getDate()).padStart(2, '0');
+    const mesNumero = mesesMap[siglaMes];
+    return `20${anoCurto}-${mesNumero}-${diaAtual}`;
   }
 }
