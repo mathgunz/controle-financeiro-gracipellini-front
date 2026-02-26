@@ -63,13 +63,11 @@
     </div>
     <div class="linha">
       <span>Quantidade</span>
-      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.quantidade" type="number" min="1" />
-      <strong *ngIf="!modoEdicao">{{ despesa.quantidade }}</strong>
+      <strong>{{ despesa.quantidade }}</strong>
     </div>
     <div class="linha">
       <span>Repetição</span>
-      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.repeticao" type="text" />
-      <strong *ngIf="!modoEdicao">{{ despesa.repeticao }}</strong>
+      <strong>{{ despesa.repeticao }}</strong>
     </div>
     <div class="linha">
       <span>Data de criação</span>
