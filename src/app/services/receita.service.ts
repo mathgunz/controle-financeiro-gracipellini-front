@@ -40,4 +40,8 @@ export class ReceitaService {
       params: { dataRecebimento }
     });
   }
+
+  obterReceitaPorId(id: number): Observable<ReceitaResponse> {
+    return this.http.get<ReceitaResponse>(`${this.API_URL}/${id}`);
+  }
 }

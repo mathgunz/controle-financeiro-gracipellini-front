@@ -1,0 +1,53 @@
+<div class="container">
+  <header class="topo">
+    <button class="btn-acao btn-voltar" routerLink="/receitas" aria-label="Voltar para receitas">←</button>
+
+    <div class="titulo-wrapper">
+      <p class="subtitulo">Visualizacao</p>
+      <h1>Detalhes da receita</h1>
+    </div>
+  </header>
+
+  <section *ngIf="carregando" class="estado-card">
+    <p>Carregando detalhes...</p>
+  </section>
+
+  <section *ngIf="!carregando && erro" class="estado-card erro">
+    <p>{{ erro }}</p>
+  </section>
+
+  <section *ngIf="!carregando && receita" class="detalhes-card">
+    <div class="linha">
+      <span>Id</span>
+      <strong>{{ receita.id }}</strong>
+    </div>
+    <div class="linha">
+      <span>Nome</span>
+      <strong>{{ receita.nome }}</strong>
+    </div>
+    <div class="linha">
+      <span>Valor</span>
+      <strong>{{ +receita.valor | currency:'BRL' }}</strong>
+    </div>
+    <div class="linha">
+      <span>Data de recebimento</span>
+      <strong>{{ receita.dataRecebimento }}</strong>
+    </div>
+    <div class="linha">
+      <span>Recebida</span>
+      <strong>{{ receita.hasRecebida ? 'Sim' : 'Nao' }}</strong>
+    </div>
+    <div class="linha">
+      <span>Quantidade</span>
+      <strong>{{ receita.quantidade }}</strong>
+    </div>
+    <div class="linha">
+      <span>Repeticao</span>
+      <strong>{{ receita.repeticao }}</strong>
+    </div>
+    <div class="linha">
+      <span>Data de criacao</span>
+      <strong>{{ receita.dataCriacao }}</strong>
+    </div>
+  </section>
+</div>

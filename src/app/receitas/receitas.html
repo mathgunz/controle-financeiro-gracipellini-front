@@ -36,7 +36,7 @@
       <span>{{ receitas.length }} itens</span>
     </div>
 
-    <button class="receita" type="button" *ngFor="let item of receitas" (click)="abrirModal(item)">
+    <button class="receita" type="button" *ngFor="let item of receitas" (click)="abrirDetalhes(item)">
       <div class="data">{{ item.data }}</div>
       <div class="info">
         <div class="texto">
@@ -47,9 +47,6 @@
       </div>
     </button>
   </section>
-
-  <app-modal-opcoes *ngIf="mostrarModal" (escolha)="aoSelecionarOpcao($event)">
-  </app-modal-opcoes>
 
   <button class="botao-flutuante" routerLink="/nova-conta" aria-label="Criar nova conta">+</button>
 </div>

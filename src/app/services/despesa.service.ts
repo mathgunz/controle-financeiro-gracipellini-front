@@ -45,4 +45,8 @@ export class DespesaService {
       params: { dataPagamento }
     });
   }
+
+  obterDespesaPorId(id: number): Observable<DespesaResponse> {
+    return this.http.get<DespesaResponse>(`${this.API_URL}/${id}`);
+  }
 }

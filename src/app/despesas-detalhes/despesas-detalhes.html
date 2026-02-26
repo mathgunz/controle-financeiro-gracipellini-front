@@ -1,0 +1,65 @@
+<div class="container">
+  <header class="topo">
+    <button class="btn-acao btn-voltar" routerLink="/despesas" aria-label="Voltar para despesas">←</button>
+
+    <div class="titulo-wrapper">
+      <p class="subtitulo">Visualização</p>
+      <h1>Detalhes da despesa</h1>
+    </div>
+  </header>
+
+  <section *ngIf="carregando" class="estado-card">
+    <p>Carregando detalhes...</p>
+  </section>
+
+  <section *ngIf="!carregando && erro" class="estado-card erro">
+    <p>{{ erro }}</p>
+  </section>
+
+  <section *ngIf="!carregando && despesa" class="detalhes-card">
+    <div class="linha">
+      <span>Id</span>
+      <strong>{{ despesa.id }}</strong>
+    </div>
+    <div class="linha">
+      <span>Nome</span>
+      <strong>{{ despesa.nome }}</strong>
+    </div>
+    <div class="linha">
+      <span>Valor</span>
+      <strong>{{ +despesa.valor | currency:'BRL' }}</strong>
+    </div>
+    <div class="linha">
+      <span>Data de pagamento</span>
+      <strong>{{ despesa.dataPagamento }}</strong>
+    </div>
+    <div class="linha">
+      <span>Tipo de pagamento</span>
+      <strong>{{ despesa.tipoPagamento }}</strong>
+    </div>
+    <div class="linha">
+      <span>Categoria</span>
+      <strong>{{ despesa.categoria }}</strong>
+    </div>
+    <div class="linha">
+      <span>Conta paga</span>
+      <strong>{{ despesa.hasContaPaga ? 'Sim' : 'Não' }}</strong>
+    </div>
+    <div class="linha">
+      <span>Quantidade</span>
+      <strong>{{ despesa.quantidade }}</strong>
+    </div>
+    <div class="linha">
+      <span>Repetição</span>
+      <strong>{{ despesa.repeticao }}</strong>
+    </div>
+    <div class="linha">
+      <span>Data de criação</span>
+      <strong>{{ despesa.dataCriacao }}</strong>
+    </div>
+    <div class="linha">
+      <span>Número da parcela</span>
+      <strong>{{ despesa.numeroParcela ?? '-' }}</strong>
+    </div>
+  </section>
+</div>

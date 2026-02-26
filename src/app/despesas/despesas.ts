@@ -1,14 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { ModalOpcoes } from "../modal-opcoes/modal-opcoes";
 import { DespesaResponse, DespesaService } from '../services/despesa.service';
 import { Mes, MesOption, criarMeses, obterMesAtualDisponivel, selecionarMesDisponivel } from '../utils/mes-selector.utils';
+
+interface DespesaListagemItem {
+  id: number;
+  data: string;
+  titulo: string;
+  descricao: string;
+  valor: number;
+}
 
 @Component({
   selector: 'app-despesas',
   templateUrl: './despesas.html',
-  imports: [CommonModule, RouterModule, ModalOpcoes],
+  imports: [CommonModule, RouterModule],
   styleUrls: ['./despesas.css']
 })
 export class Despesas implements OnInit {
@@ -19,18 +26,10 @@ export class Despesas implements OnInit {
   ) { }
 
   public showMesDrop = false;
-  mostrarModal = false;
-  itemSelecionado: any;
 
   public meses: MesOption[] = criarMeses();
 
-  @Input() despesas = [
-    { data: '1 dom', titulo: 'Casa - Banho Cachorras 1/6', descricao: 'Cartão de crédito | Outros', valor: 380 },
-    { data: '1 dom', titulo: 'Casa - Berço Lara', descricao: 'Cartão de crédito | Outros', valor: 500 },
-    { data: '10 ter', titulo: 'Casa - Financiamento Carro', descricao: 'Despesa fixa | Transporte', valor: 2300 },
-    { data: '10 ter', titulo: 'Casa - Terapias - Itau', descricao: 'Cartão de crédito | Outros', valor: 5000 },
-    { data: '12 qui', titulo: 'Pessoal - Vasectomia', descricao: 'Cartão de crédito | Outros', valor: 1200 }
-  ];
+  @Input() despesas: DespesaListagemItem[] = [];
 
   public mesSelecionado: Mes = obterMesAtualDisponivel(this.meses);
 
@@ -42,14 +41,8 @@ export class Despesas implements OnInit {
     return this.despesas.reduce((acc, item) => acc + item.valor, 0);
   }
 
-  abrirModal(item: any) {
-    this.itemSelecionado = item;
-    this.mostrarModal = true;
-  }
-
-  aoSelecionarOpcao(valor: string) {
-    this.mostrarModal = false;
-    this.router.navigate(['/despesas']);
+  abrirDetalhes(item: DespesaListagemItem) {
+    this.router.navigate(['/despesas', item.id]);
   }
 
   public toggleMesDrop() {
@@ -68,6 +61,7 @@ export class Despesas implements OnInit {
     this.despesaService.listarDespesas(dataPagamento).subscribe({
       next: (despesasApi) => {
         this.despesas = despesasApi.map((item: DespesaResponse) => ({
+          id: item.id,
           data: item.dataPagamento,
           titulo: item.nome,
           descricao: `${item.tipoPagamento} | ${item.categoria}`,
