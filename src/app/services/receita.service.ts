@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 export interface ReceitaRequest {
   nome: string;
@@ -20,6 +20,15 @@ export interface ReceitaResponse {
   quantidade: number;
   repeticao: string;
   dataCriacao: string;
+}
+
+export interface ReceitaEdicaoRequest {
+  nome: string;
+  valor: number;
+  dataRecebimento: string;
+  hasRecebida: boolean;
+  quantidade: number;
+  repeticao: string;
 }
 
 @Injectable({
@@ -43,5 +52,11 @@ export class ReceitaService {
 
   obterReceitaPorId(id: number): Observable<ReceitaResponse> {
     return this.http.get<ReceitaResponse>(`${this.API_URL}/${id}`);
+  }
+
+  salvarEdicaoMock(id: number, receita: ReceitaEdicaoRequest): Observable<{ sucesso: boolean }> {
+    void id;
+    void receita;
+    return of({ sucesso: true });
   }
 }

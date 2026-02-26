@@ -6,6 +6,12 @@
       <p class="subtitulo">Visualizacao</p>
       <h1>Detalhes da receita</h1>
     </div>
+
+    <div class="acoes" *ngIf="!carregando && receita">
+      <button class="btn-acao" type="button" (click)="toggleEdicao()" [attr.aria-label]="modoEdicao ? 'Travar edicao' : 'Destravar edicao'">
+        {{ modoEdicao ? '🔒' : '🔓' }}
+      </button>
+    </div>
   </header>
 
   <section *ngIf="carregando" class="estado-card">
@@ -16,6 +22,10 @@
     <p>{{ erro }}</p>
   </section>
 
+  <section *ngIf="!carregando && mensagem" class="estado-card sucesso">
+    <p>{{ mensagem }}</p>
+  </section>
+
   <section *ngIf="!carregando && receita" class="detalhes-card">
     <div class="linha">
       <span>Id</span>
@@ -23,19 +33,23 @@
     </div>
     <div class="linha">
       <span>Nome</span>
-      <strong>{{ receita.nome }}</strong>
+      <input *ngIf="modoEdicao && receitaEdicao" [(ngModel)]="receitaEdicao.nome" type="text" />
+      <strong *ngIf="!modoEdicao">{{ receita.nome }}</strong>
     </div>
     <div class="linha">
       <span>Valor</span>
-      <strong>{{ +receita.valor | currency:'BRL' }}</strong>
+      <input *ngIf="modoEdicao && receitaEdicao" [(ngModel)]="receitaEdicao.valor" type="number" min="0" step="0.01" />
+      <strong *ngIf="!modoEdicao">{{ +receita.valor | currency:'BRL' }}</strong>
     </div>
     <div class="linha">
       <span>Data de recebimento</span>
-      <strong>{{ receita.dataRecebimento }}</strong>
+      <input *ngIf="modoEdicao && receitaEdicao" [(ngModel)]="receitaEdicao.dataRecebimento" type="text" />
+      <strong *ngIf="!modoEdicao">{{ receita.dataRecebimento }}</strong>
     </div>
     <div class="linha">
       <span>Recebida</span>
-      <strong>{{ receita.hasRecebida ? 'Sim' : 'Nao' }}</strong>
+      <input *ngIf="modoEdicao && receitaEdicao" [(ngModel)]="receitaEdicao.hasRecebida" type="checkbox" />
+      <strong *ngIf="!modoEdicao">{{ receita.hasRecebida ? 'Sim' : 'Nao' }}</strong>
     </div>
     <div class="linha">
       <span>Quantidade</span>
@@ -48,6 +62,12 @@
     <div class="linha">
       <span>Data de criacao</span>
       <strong>{{ receita.dataCriacao }}</strong>
+    </div>
+
+    <div class="acoes-form" *ngIf="modoEdicao">
+      <button class="btn-salvar" type="button" (click)="salvarEdicao()" [disabled]="salvando">
+        {{ salvando ? 'Salvando...' : 'Salvar' }}
+      </button>
     </div>
   </section>
 </div>
