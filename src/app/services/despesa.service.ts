@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 export interface DespesaRequest {
   nome: string;
@@ -27,6 +27,18 @@ export interface DespesaResponse {
   numeroParcela: number | null;
 }
 
+export interface DespesaEdicaoRequest {
+  nome: string;
+  valor: number;
+  dataPagamento: string;
+  tipoPagamento: string;
+  categoria: string;
+  hasContaPaga: boolean;
+  quantidade: number;
+  repeticao: string;
+  numeroParcela: number | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -48,5 +60,11 @@ export class DespesaService {
 
   obterDespesaPorId(id: number): Observable<DespesaResponse> {
     return this.http.get<DespesaResponse>(`${this.API_URL}/${id}`);
+  }
+
+  salvarEdicaoMock(id: number, despesa: DespesaEdicaoRequest): Observable<{ sucesso: boolean }> {
+    void id;
+    void despesa;
+    return of({ sucesso: true });
   }
 }

@@ -6,6 +6,12 @@
       <p class="subtitulo">Visualização</p>
       <h1>Detalhes da despesa</h1>
     </div>
+
+    <div class="acoes" *ngIf="!carregando && despesa">
+      <button class="btn-acao" type="button" (click)="toggleEdicao()" [attr.aria-label]="modoEdicao ? 'Travar edicao' : 'Destravar edicao'">
+        {{ modoEdicao ? '🔒' : '🔓' }}
+      </button>
+    </div>
   </header>
 
   <section *ngIf="carregando" class="estado-card">
@@ -16,6 +22,10 @@
     <p>{{ erro }}</p>
   </section>
 
+  <section *ngIf="!carregando && mensagem" class="estado-card sucesso">
+    <p>{{ mensagem }}</p>
+  </section>
+
   <section *ngIf="!carregando && despesa" class="detalhes-card">
     <div class="linha">
       <span>Id</span>
@@ -23,35 +33,43 @@
     </div>
     <div class="linha">
       <span>Nome</span>
-      <strong>{{ despesa.nome }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.nome" type="text" />
+      <strong *ngIf="!modoEdicao">{{ despesa.nome }}</strong>
     </div>
     <div class="linha">
       <span>Valor</span>
-      <strong>{{ +despesa.valor | currency:'BRL' }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.valor" type="number" min="0" step="0.01" />
+      <strong *ngIf="!modoEdicao">{{ +despesa.valor | currency:'BRL' }}</strong>
     </div>
     <div class="linha">
       <span>Data de pagamento</span>
-      <strong>{{ despesa.dataPagamento }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.dataPagamento" type="text" />
+      <strong *ngIf="!modoEdicao">{{ despesa.dataPagamento }}</strong>
     </div>
     <div class="linha">
       <span>Tipo de pagamento</span>
-      <strong>{{ despesa.tipoPagamento }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.tipoPagamento" type="text" />
+      <strong *ngIf="!modoEdicao">{{ despesa.tipoPagamento }}</strong>
     </div>
     <div class="linha">
       <span>Categoria</span>
-      <strong>{{ despesa.categoria }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.categoria" type="text" />
+      <strong *ngIf="!modoEdicao">{{ despesa.categoria }}</strong>
     </div>
     <div class="linha">
       <span>Conta paga</span>
-      <strong>{{ despesa.hasContaPaga ? 'Sim' : 'Não' }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.hasContaPaga" type="checkbox" />
+      <strong *ngIf="!modoEdicao">{{ despesa.hasContaPaga ? 'Sim' : 'Não' }}</strong>
     </div>
     <div class="linha">
       <span>Quantidade</span>
-      <strong>{{ despesa.quantidade }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.quantidade" type="number" min="1" />
+      <strong *ngIf="!modoEdicao">{{ despesa.quantidade }}</strong>
     </div>
     <div class="linha">
       <span>Repetição</span>
-      <strong>{{ despesa.repeticao }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.repeticao" type="text" />
+      <strong *ngIf="!modoEdicao">{{ despesa.repeticao }}</strong>
     </div>
     <div class="linha">
       <span>Data de criação</span>
@@ -59,7 +77,14 @@
     </div>
     <div class="linha">
       <span>Número da parcela</span>
-      <strong>{{ despesa.numeroParcela ?? '-' }}</strong>
+      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.numeroParcela" type="number" min="1" />
+      <strong *ngIf="!modoEdicao">{{ despesa.numeroParcela ?? '-' }}</strong>
+    </div>
+
+    <div class="acoes-form" *ngIf="modoEdicao">
+      <button class="btn-salvar" type="button" (click)="salvarEdicao()" [disabled]="salvando">
+        {{ salvando ? 'Salvando...' : 'Salvar' }}
+      </button>
     </div>
   </section>
 </div>
