@@ -75,8 +75,7 @@
     </div>
     <div class="linha">
       <span>Número da parcela</span>
-      <input *ngIf="modoEdicao && despesaEdicao" [(ngModel)]="despesaEdicao.numeroParcela" type="number" min="1" />
-      <strong *ngIf="!modoEdicao">{{ despesa.numeroParcela ?? '-' }}</strong>
+      <strong>{{ despesa.numeroParcela ?? '-' }}</strong>
     </div>
 
     <div class="acoes-form" *ngIf="modoEdicao">
