@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { ReceitaEdicaoRequest, ReceitaResponse, ReceitaService } from '../services/receita.service';
+import { ReceitaEdicaoRequest, ReceitaResponse, ReceitaService, TipoEdicaoReceita } from '../services/receita.service';
 
 @Component({
   selector: 'app-receitas-detalhes',
@@ -16,8 +16,14 @@ export class ReceitasDetalhes implements OnInit {
   public erro = '';
   public mensagem = '';
   public modoEdicao = false;
+  public mostrarModalTipoEdicao = false;
   public receita: ReceitaResponse | null = null;
   public receitaEdicao: ReceitaEdicaoRequest | null = null;
+  public tiposEdicao: { valor: TipoEdicaoReceita; label: string }[] = [
+    { valor: 'CONTA_SELECIONADA', label: 'Conta selecionada' },
+    { valor: 'PROXIMAS_CONTAS', label: 'Proximas contas' },
+    { valor: 'TODAS_CONTAS', label: 'Todas as contas' }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -61,6 +67,23 @@ export class ReceitasDetalhes implements OnInit {
   }
 
   public salvarEdicao(): void {
+    if (!this.receita || !this.receitaEdicao || this.salvando || !this.modoEdicao) {
+      return;
+    }
+
+    this.mostrarModalTipoEdicao = true;
+    this.mensagem = '';
+  }
+
+  public fecharModalTipoEdicao(): void {
+    if (this.salvando) {
+      return;
+    }
+
+    this.mostrarModalTipoEdicao = false;
+  }
+
+  public confirmarTipoEdicao(tipoEdicao: TipoEdicaoReceita): void {
     if (!this.receita || !this.receitaEdicao || this.salvando) {
       return;
     }
@@ -69,21 +92,30 @@ export class ReceitasDetalhes implements OnInit {
     const dadosEdicao = this.receitaEdicao;
 
     this.salvando = true;
+    this.mostrarModalTipoEdicao = false;
     this.mensagem = '';
 
-    this.receitaService.salvarEdicaoMock(receitaAtual.id, dadosEdicao).subscribe({
-      next: () => {
-        this.receita = {
+    this.receitaService.salvarEdicao(receitaAtual.id, dadosEdicao, tipoEdicao).subscribe({
+      next: (resultado) => {
+        const receitaAtualizada = resultado.find((item) => item.id === receitaAtual.id) ?? resultado[0];
+        this.receita = receitaAtualizada ?? {
           ...receitaAtual,
           ...dadosEdicao,
-          valor: String(dadosEdicao.valor)
+          valor: String(dadosEdicao.valor),
+          dataRecebimento: receitaAtual.dataRecebimento,
+          quantidade: receitaAtual.quantidade,
+          repeticao: receitaAtual.repeticao,
+          dataCriacao: receitaAtual.dataCriacao
         };
+
+        this.receitaEdicao = this.criarModeloEdicao(this.receita);
         this.modoEdicao = false;
         this.salvando = false;
         this.mensagem = 'Alteracao salva com sucesso.';
       },
       error: () => {
         this.salvando = false;
+        this.mostrarModalTipoEdicao = false;
         this.mensagem = 'Nao foi possivel salvar a alteracao.';
       }
     });

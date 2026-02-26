@@ -37,10 +37,10 @@ export class NovaConta {
     nome: '',
     valor: null,
     tipoConta: '',
-    tipoPagamento: '',
-    categoria: '',
+    tipoPagamento: 'VARIAVEL',
+    categoria: 'OUTROS',
     paga: false,
-    repeticao: '',
+    repeticao: 'MENSALMENTE',
     quantidade: 1,
     dataTexto: ''
   };
