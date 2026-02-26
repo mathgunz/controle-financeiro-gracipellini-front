@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export interface DespesaRequest {
   nome: string;
@@ -39,6 +39,18 @@ export interface DespesaEdicaoRequest {
   numeroParcela: number | null;
 }
 
+export type TipoEdicaoDespesa = 'CONTA_SELECIONADA' | 'PROXIMAS_CONTAS' | 'TODAS_CONTAS';
+
+export interface DespesaEdicaoApiRequest {
+  nome: string;
+  valor: string;
+  dataPagamento: string;
+  tipoPagamento: string;
+  categoria: string;
+  hasContaPaga: boolean;
+  tipoEdicao: TipoEdicaoDespesa;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,9 +74,17 @@ export class DespesaService {
     return this.http.get<DespesaResponse>(`${this.API_URL}/${id}`);
   }
 
-  salvarEdicaoMock(id: number, despesa: DespesaEdicaoRequest): Observable<{ sucesso: boolean }> {
-    void id;
-    void despesa;
-    return of({ sucesso: true });
+  salvarEdicao(id: number, despesa: DespesaEdicaoRequest, tipoEdicao: TipoEdicaoDespesa): Observable<DespesaResponse[]> {
+    const payload: DespesaEdicaoApiRequest = {
+      nome: despesa.nome,
+      valor: String(despesa.valor),
+      dataPagamento: despesa.dataPagamento,
+      tipoPagamento: despesa.tipoPagamento,
+      categoria: despesa.categoria,
+      hasContaPaga: despesa.hasContaPaga,
+      tipoEdicao
+    };
+
+    return this.http.put<DespesaResponse[]>(`${this.API_URL}/${id}`, payload);
   }
 }

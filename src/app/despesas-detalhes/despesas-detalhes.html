@@ -85,4 +85,26 @@
       </button>
     </div>
   </section>
+
+  <div class="modal-overlay" *ngIf="mostrarModalTipoEdicao">
+    <section class="modal-card">
+      <header class="modal-topo">
+        <button class="btn-acao btn-voltar-modal" type="button" (click)="fecharModalTipoEdicao()" aria-label="Voltar">
+          ←
+        </button>
+        <h2>Tipo de edicao</h2>
+      </header>
+
+      <p>Escolha como deseja aplicar esta alteracao:</p>
+
+      <button
+        class="btn-opcao"
+        type="button"
+        *ngFor="let tipo of tiposEdicao"
+        (click)="confirmarTipoEdicao(tipo.valor)"
+        [disabled]="salvando">
+        {{ tipo.label }}
+      </button>
+    </section>
+  </div>
 </div>
