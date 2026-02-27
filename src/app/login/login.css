@@ -1,0 +1,73 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(11, 92, 255, 0.22), transparent 42%),
+    radial-gradient(circle at 10% 40%, rgba(76, 175, 80, 0.2), transparent 48%),
+    linear-gradient(180deg, #101010 0%, #181818 100%);
+  color: #f5f5f5;
+}
+
+.login-card {
+  width: min(100%, 360px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  padding: 18px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+.login-card h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.subtitulo {
+  margin: 6px 0 14px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-login label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.form-login input {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  padding: 10px 12px;
+}
+
+.form-login button {
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(76, 175, 80, 0.5);
+  background: rgba(76, 175, 80, 0.22);
+  color: #ddffdf;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.hint {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.erro {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #ff9e99;
+}

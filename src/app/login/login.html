@@ -1,0 +1,32 @@
+<div class="login-container">
+  <section class="login-card">
+    <h1>Entrar</h1>
+    <p class="subtitulo">Entre com seu email e senha</p>
+
+    <form (ngSubmit)="entrar()" class="form-login">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="email"
+        placeholder="joao.silva@example.com"
+        required />
+
+      <label for="senha">Senha</label>
+      <input
+        id="senha"
+        name="senha"
+        type="password"
+        [(ngModel)]="senha"
+        placeholder="sua senha"
+        required />
+
+      <button type="submit" [disabled]="enviando">
+        {{ enviando ? 'Entrando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    <p class="erro" *ngIf="erro">{{ erro }}</p>
+  </section>
+</div>
