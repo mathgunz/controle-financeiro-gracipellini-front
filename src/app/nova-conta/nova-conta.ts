@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { DespesaService, DespesaRequest } from '../services/despesa.service';
 import { ReceitaService, ReceitaRequest } from '../services/receita.service';
@@ -10,7 +9,7 @@ import { ReceitaService, ReceitaRequest } from '../services/receita.service';
 @Component({
   selector: 'app-nova-conta',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, NgxMaskDirective, NgxMaskPipe],
+  imports: [CommonModule, FormsModule, NgxMaskDirective, NgxMaskPipe],
   templateUrl: './nova-conta.html',
   styleUrl: './nova-conta.css'
 })

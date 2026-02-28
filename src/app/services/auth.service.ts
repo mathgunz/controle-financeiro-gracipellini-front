@@ -12,6 +12,11 @@ interface LoginRequest {
 
 interface LoginResponse {
   token?: string;
+  accessToken?: string;
+  data?: {
+    token?: string;
+    accessToken?: string;
+  };
 }
 
 @Injectable({
@@ -27,9 +32,14 @@ export class AuthService {
 
     return this.http.post<LoginResponse>(this.API_URL, payload).pipe(
       tap((response) => {
-        localStorage.setItem(AUTH_STORAGE_KEY, '1');
-        if (response?.token) {
-          localStorage.setItem(AUTH_TOKEN_KEY, response.token);
+        const token = this.extrairToken(response);
+
+        if (token) {
+          localStorage.setItem(AUTH_STORAGE_KEY, '1');
+          localStorage.setItem(AUTH_TOKEN_KEY, token);
+        } else {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+          localStorage.removeItem(AUTH_TOKEN_KEY);
         }
       })
     );
@@ -41,10 +51,24 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean {
-    return localStorage.getItem(AUTH_STORAGE_KEY) === '1';
+    return localStorage.getItem(AUTH_STORAGE_KEY) === '1' && !!this.getToken();
   }
 
   public getToken(): string | null {
     return localStorage.getItem(AUTH_TOKEN_KEY);
+  }
+
+  private extrairToken(response: LoginResponse): string | null {
+    const tokenBruto =
+      response?.token ??
+      response?.accessToken ??
+      response?.data?.token ??
+      response?.data?.accessToken;
+
+    if (!tokenBruto || typeof tokenBruto !== 'string') {
+      return null;
+    }
+
+    return tokenBruto.replace(/^Bearer\s+/i, '').trim() || null;
   }
 }
