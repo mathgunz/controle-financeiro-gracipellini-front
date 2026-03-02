@@ -57,3 +57,39 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Run with Docker Compose (Front + API)
+
+This project now uses `/api` as API base URL.
+
+- Local development (`ng serve`) uses [`proxy.conf.json`](./proxy.conf.json) and forwards `/api` to `http://localhost:3000`.
+- Production container uses [`nginx.conf`](./nginx.conf) and forwards `/api` to the `api` service in Docker Compose.
+
+### 1) Configure the API service
+
+Edit [`docker-compose.yml`](./docker-compose.yml) and set your API image:
+
+```yaml
+api:
+  image: ghcr.io/seu-usuario/controle-financeiro-api:latest
+```
+
+If your API repository is in the same EC2 folder, you can use `build` instead of `image` (example already commented in the file).
+
+### 2) Start on EC2
+
+```bash
+docker compose up -d --build
+```
+
+Access:
+
+- Frontend: `http://<EC2_PUBLIC_IP>/`
+- API through frontend proxy: `http://<EC2_PUBLIC_IP>/api/...`
+
+### 3) EC2 requirements
+
+- Security Group inbound:
+  - `80/tcp` from your allowed sources
+  - `22/tcp` for SSH
+- Docker and Docker Compose plugin installed on the instance.

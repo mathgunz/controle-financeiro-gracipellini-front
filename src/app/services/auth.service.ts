@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { API_BASE_URL } from './api-base-url';
 
 const AUTH_STORAGE_KEY = 'fake_auth_logged';
 export const AUTH_TOKEN_KEY = 'auth_token';
@@ -23,7 +24,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:3000/auth/login';
+  private readonly API_URL = `${API_BASE_URL}/auth/login`;
 
   constructor(private http: HttpClient) { }
 

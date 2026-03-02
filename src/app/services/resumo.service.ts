@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from './api-base-url';
 
 export interface Receita {
   totalRecebida: number;
@@ -28,7 +29,7 @@ export interface Resumo {
 })
 export class ResumoService {
 
-  private readonly API_URL = 'http://localhost:3000/resumo';
+  private readonly API_URL = `${API_BASE_URL}/resumo`;
 
   constructor(private http: HttpClient) { }
 

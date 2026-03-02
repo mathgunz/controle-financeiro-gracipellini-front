@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from './api-base-url';
 
 export interface DespesaRequest {
   nome: string;
@@ -56,7 +57,7 @@ export interface DespesaEdicaoApiRequest {
 })
 export class DespesaService {
 
-  private readonly API_URL = 'http://localhost:3000/despesa';
+  private readonly API_URL = `${API_BASE_URL}/despesa`;
 
   constructor(private http: HttpClient) { }
 

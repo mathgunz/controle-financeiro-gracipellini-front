@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from './api-base-url';
 
 export interface ReceitaRequest {
   nome: string;
@@ -46,7 +47,7 @@ export interface ReceitaEdicaoApiRequest {
 })
 export class ReceitaService {
 
-  private readonly API_URL = 'http://localhost:3000/receita';
+  private readonly API_URL = `${API_BASE_URL}/receita`;
 
   constructor(private http: HttpClient) { }
 
