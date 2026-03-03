@@ -76,4 +76,8 @@ export class ReceitaService {
 
     return this.http.put<ReceitaResponse[]>(`${this.API_URL}/${id}`, payload);
   }
+
+  removerReceita(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
 }

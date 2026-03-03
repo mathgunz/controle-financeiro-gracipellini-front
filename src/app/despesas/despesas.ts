@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { finalize, forkJoin } from 'rxjs';
 import { DespesaResponse, DespesaService } from '../services/despesa.service';
 import { Mes, MesOption, criarMeses, obterMesAtualDisponivel, selecionarMesDisponivel } from '../utils/mes-selector.utils';
 
@@ -33,12 +34,28 @@ export class Despesas implements OnInit {
 
   public mesSelecionado: Mes = obterMesAtualDisponivel(this.meses);
 
+  public removendoSelecionadas = false;
+
+  private despesasSelecionadas = new Set<number>();
+
   ngOnInit(): void {
     this.carregarDespesas();
   }
 
   get total(): number {
     return this.despesas.reduce((acc, item) => acc + item.valor, 0);
+  }
+
+  get quantidadeSelecionada(): number {
+    return this.despesasSelecionadas.size;
+  }
+
+  get todasSelecionadas(): boolean {
+    return this.despesas.length > 0 && this.quantidadeSelecionada === this.despesas.length;
+  }
+
+  get selecaoParcial(): boolean {
+    return this.quantidadeSelecionada > 0 && !this.todasSelecionadas;
   }
 
   abrirDetalhes(item: DespesaListagemItem) {
@@ -55,6 +72,63 @@ export class Despesas implements OnInit {
     this.carregarDespesas();
   }
 
+  public estaSelecionada(id: number): boolean {
+    return this.despesasSelecionadas.has(id);
+  }
+
+  public alternarSelecionada(id: number, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+
+    if (checked) {
+      this.despesasSelecionadas.add(id);
+      return;
+    }
+
+    this.despesasSelecionadas.delete(id);
+  }
+
+  public alternarSelecionarTodas(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+
+    if (checked) {
+      this.despesasSelecionadas = new Set(this.despesas.map((item) => item.id));
+      return;
+    }
+
+    this.despesasSelecionadas.clear();
+  }
+
+  public removerSelecionadas(): void {
+    if (this.quantidadeSelecionada === 0 || this.removendoSelecionadas) {
+      return;
+    }
+
+    const quantidade = this.quantidadeSelecionada;
+    const confirmar = window.confirm(`Deseja remover ${quantidade} despesa(s) selecionada(s)?`);
+
+    if (!confirmar) {
+      return;
+    }
+
+    this.removendoSelecionadas = true;
+    const ids = Array.from(this.despesasSelecionadas);
+
+    forkJoin(ids.map((id) => this.despesaService.removerDespesa(id)))
+      .pipe(finalize(() => {
+        this.removendoSelecionadas = false;
+      }))
+      .subscribe({
+        next: () => {
+          this.despesas = this.despesas.filter((item) => !this.despesasSelecionadas.has(item.id));
+          this.despesasSelecionadas.clear();
+        },
+        error: (error) => {
+          console.error('Erro ao remover despesas selecionadas:', error);
+          window.alert('Não foi possível remover todas as despesas selecionadas.');
+        }
+      });
+  }
+
   private carregarDespesas(): void {
     const dataPagamento = this.formatarDataFiltro(this.mesSelecionado);
 
@@ -67,10 +141,12 @@ export class Despesas implements OnInit {
           descricao: `${item.tipoPagamento} | ${item.categoria}`,
           valor: Number(item.valor) || 0
         }));
+        this.despesasSelecionadas.clear();
       },
       error: (error) => {
         console.error('Erro ao carregar despesas:', error);
         this.despesas = [];
+        this.despesasSelecionadas.clear();
       }
     });
   }

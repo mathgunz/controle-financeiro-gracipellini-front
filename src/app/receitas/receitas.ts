@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { finalize, forkJoin } from 'rxjs';
 import { ReceitaResponse, ReceitaService } from '../services/receita.service';
 import { Mes, MesOption, criarMeses, obterMesAtualDisponivel, selecionarMesDisponivel } from '../utils/mes-selector.utils';
 
@@ -33,12 +34,28 @@ export class Receitas implements OnInit {
 
   public mesSelecionado: Mes = obterMesAtualDisponivel(this.meses);
 
+  public removendoSelecionadas = false;
+
+  private receitasSelecionadas = new Set<number>();
+
   ngOnInit(): void {
     this.carregarReceitas();
   }
 
   get total(): number {
     return this.receitas.reduce((acc, item) => acc + item.valor, 0);
+  }
+
+  get quantidadeSelecionada(): number {
+    return this.receitasSelecionadas.size;
+  }
+
+  get todasSelecionadas(): boolean {
+    return this.receitas.length > 0 && this.quantidadeSelecionada === this.receitas.length;
+  }
+
+  get selecaoParcial(): boolean {
+    return this.quantidadeSelecionada > 0 && !this.todasSelecionadas;
   }
 
   abrirDetalhes(item: ReceitaListagemItem) {
@@ -55,6 +72,63 @@ export class Receitas implements OnInit {
     this.carregarReceitas();
   }
 
+  public estaSelecionada(id: number): boolean {
+    return this.receitasSelecionadas.has(id);
+  }
+
+  public alternarSelecionada(id: number, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+
+    if (checked) {
+      this.receitasSelecionadas.add(id);
+      return;
+    }
+
+    this.receitasSelecionadas.delete(id);
+  }
+
+  public alternarSelecionarTodas(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+
+    if (checked) {
+      this.receitasSelecionadas = new Set(this.receitas.map((item) => item.id));
+      return;
+    }
+
+    this.receitasSelecionadas.clear();
+  }
+
+  public removerSelecionadas(): void {
+    if (this.quantidadeSelecionada === 0 || this.removendoSelecionadas) {
+      return;
+    }
+
+    const quantidade = this.quantidadeSelecionada;
+    const confirmar = window.confirm(`Deseja remover ${quantidade} receita(s) selecionada(s)?`);
+
+    if (!confirmar) {
+      return;
+    }
+
+    this.removendoSelecionadas = true;
+    const ids = Array.from(this.receitasSelecionadas);
+
+    forkJoin(ids.map((id) => this.receitaService.removerReceita(id)))
+      .pipe(finalize(() => {
+        this.removendoSelecionadas = false;
+      }))
+      .subscribe({
+        next: () => {
+          this.receitas = this.receitas.filter((item) => !this.receitasSelecionadas.has(item.id));
+          this.receitasSelecionadas.clear();
+        },
+        error: (error) => {
+          console.error('Erro ao remover receitas selecionadas:', error);
+          window.alert('Não foi possível remover todas as receitas selecionadas.');
+        }
+      });
+  }
+
   private carregarReceitas(): void {
     const dataRecebimento = this.formatarDataFiltro(this.mesSelecionado);
 
@@ -67,10 +141,12 @@ export class Receitas implements OnInit {
           descricao: item.repeticao,
           valor: Number(item.valor) || 0
         }));
+        this.receitasSelecionadas.clear();
       },
       error: (error) => {
         console.error('Erro ao carregar receitas:', error);
         this.receitas = [];
+        this.receitasSelecionadas.clear();
       }
     });
   }

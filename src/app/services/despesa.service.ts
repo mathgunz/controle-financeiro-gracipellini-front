@@ -88,4 +88,8 @@ export class DespesaService {
 
     return this.http.put<DespesaResponse[]>(`${this.API_URL}/${id}`, payload);
   }
+
+  removerDespesa(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
 }

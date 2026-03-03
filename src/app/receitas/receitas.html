@@ -20,7 +20,10 @@
 
     <div class="acoes">
       <button class="btn-acao" type="button" aria-label="Buscar">🔍</button>
-      <button class="btn-acao" type="button" aria-label="Mais opções">⋮</button>
+      <button class="btn-acao btn-remover" type="button" aria-label="Remover receitas selecionadas"
+        [disabled]="quantidadeSelecionada === 0 || removendoSelecionadas" (click)="removerSelecionadas()">
+        🗑
+      </button>
     </div>
   </header>
 
@@ -36,16 +39,36 @@
       <span>{{ receitas.length }} itens</span>
     </div>
 
-    <button class="receita" type="button" *ngFor="let item of receitas" (click)="abrirDetalhes(item)">
-      <div class="data">{{ item.data }}</div>
-      <div class="info">
-        <div class="texto">
-          <div class="titulo">{{ item.titulo }}</div>
-          <div class="descricao">{{ item.descricao }}</div>
+    <div class="selecao-toolbar" *ngIf="receitas.length > 0">
+      <label class="check-selecao">
+        <input type="checkbox" [checked]="todasSelecionadas" [indeterminate]="selecaoParcial"
+          (change)="alternarSelecionarTodas($event)">
+        <span>Selecionar todas</span>
+      </label>
+
+      <button class="btn-remover-selecionadas" type="button" [disabled]="quantidadeSelecionada === 0 || removendoSelecionadas"
+        (click)="removerSelecionadas()">
+        {{ removendoSelecionadas ? 'Removendo...' : 'Remover selecionadas (' + quantidadeSelecionada + ')' }}
+      </button>
+    </div>
+
+    <div class="receita" *ngFor="let item of receitas">
+      <label class="check-selecao item-check" aria-label="Selecionar receita">
+        <input type="checkbox" [checked]="estaSelecionada(item.id)" (click)="$event.stopPropagation()"
+          (change)="alternarSelecionada(item.id, $event)">
+      </label>
+
+      <button class="receita-detalhe" type="button" (click)="abrirDetalhes(item)">
+        <div class="data">{{ item.data }}</div>
+        <div class="info">
+          <div class="texto">
+            <div class="titulo">{{ item.titulo }}</div>
+            <div class="descricao">{{ item.descricao }}</div>
+          </div>
+          <div class="valor">+ {{ item.valor | currency:'BRL' }}</div>
         </div>
-        <div class="valor">+ {{ item.valor | currency:'BRL' }}</div>
-      </div>
-    </button>
+      </button>
+    </div>
   </section>
 
   <button class="botao-flutuante" routerLink="/nova-conta" aria-label="Criar nova conta">+</button>
