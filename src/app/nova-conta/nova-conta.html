@@ -3,7 +3,14 @@
     <header class="card-header" [class.header-vermelho]="novaConta.tipoConta === 'despesa'" [class.header-azul]="novaConta.tipoConta === 'receita'">
       <button type="button" class="btn-fechar" (click)="fecharModal()">✕</button>
       <h3 class="card-title">Nova Conta</h3>
-      <button class="btn-criar" type="button" (click)="salvarNovaConta()">SALVAR</button>
+      <button
+        class="btn-criar"
+        type="button"
+        (click)="salvarNovaConta()"
+        [disabled]="(novaConta.tipoConta === 'despesa' && salvandoDespesa) || (novaConta.tipoConta === 'receita' && salvandoReceita)"
+        [class.is-loading]="(novaConta.tipoConta === 'despesa' && salvandoDespesa) || (novaConta.tipoConta === 'receita' && salvandoReceita)">
+        {{ (novaConta.tipoConta === 'despesa' && salvandoDespesa) || (novaConta.tipoConta === 'receita' && salvandoReceita) ? 'SALVANDO...' : 'SALVAR' }}
+      </button>
     </header>
 
     <form class="formulario">

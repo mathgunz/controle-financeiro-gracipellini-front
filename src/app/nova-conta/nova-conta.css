@@ -78,6 +78,12 @@
   transform: translateY(-50%);
 }
 
+.btn-criar:disabled,
+.btn-criar.is-loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .card-title { margin:0; font-size:18px; font-weight:700; color:white }
 
 .formulario {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { delay, finalize } from 'rxjs';
 import { DespesaService, DespesaRequest } from '../services/despesa.service';
 import { ReceitaService, ReceitaRequest } from '../services/receita.service';
 
@@ -14,11 +15,13 @@ import { ReceitaService, ReceitaRequest } from '../services/receita.service';
   styleUrl: './nova-conta.css'
 })
 export class NovaConta {
+  public salvandoDespesa = false;
+  public salvandoReceita = false;
 
   constructor(private router: Router, private despesaService: DespesaService, private receitaService: ReceitaService) {
     const state = this.router.getCurrentNavigation()?.extras?.state;
     if (state?.['conta']) {
-      this.novaConta = state['conta'];
+      this.novaConta = { ...this.novaConta, ...state['conta'] };
     }
   }
 
@@ -35,7 +38,7 @@ export class NovaConta {
   @Input() novaConta = {
     nome: '',
     valor: null,
-    tipoConta: '',
+    tipoConta: 'despesa',
     tipoPagamento: 'VARIAVEL',
     categoria: 'OUTROS',
     paga: false,
@@ -65,6 +68,14 @@ export class NovaConta {
   }
 
   salvarNovaConta(): void {
+    if (this.novaConta.tipoConta === 'despesa' && this.salvandoDespesa) {
+      return;
+    }
+
+    if (this.novaConta.tipoConta === 'receita' && this.salvandoReceita) {
+      return;
+    }
+
     if (this.novaConta.tipoConta === 'despesa') {
       this.salvarDespesa();
     } else if (this.novaConta.tipoConta === 'receita') {
@@ -102,18 +113,27 @@ export class NovaConta {
       repeticao: this.novaConta.repeticao
     };
 
+    this.salvandoDespesa = true;
+
     // Fazer chamada POST
-    this.despesaService.salvarDespesa(despesaRequest).subscribe({
-      next: (response) => {
-        console.log('Despesa salva com sucesso:', response);
-        alert('Despesa salva com sucesso!');
-        this.fecharModal();
-      },
-      error: (error) => {
-        console.error('Erro ao salvar despesa:', error);
-        alert('Erro ao salvar despesa. Tente novamente.');
-      }
-    });
+    this.despesaService.salvarDespesa(despesaRequest)
+      .pipe(
+        delay(5000),
+        finalize(() => {
+          this.salvandoDespesa = false;
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Despesa salva com sucesso:', response);
+          alert('Despesa salva com sucesso!');
+          this.fecharModal();
+        },
+        error: (error) => {
+          console.error('Erro ao salvar despesa:', error);
+          alert('Erro ao salvar despesa. Tente novamente.');
+        }
+      });
   }
 
   private salvarReceita(): void {
@@ -140,18 +160,27 @@ export class NovaConta {
       hasRecebida: this.novaConta.paga
     };
 
+    this.salvandoReceita = true;
+
     // Fazer chamada POST
-    this.receitaService.salvarReceita(receitaRequest).subscribe({
-      next: (response) => {
-        console.log('Receita salva com sucesso:', response);
-        alert('Receita salva com sucesso!');
-        this.fecharModal();
-      },
-      error: (error) => {
-        console.error('Erro ao salvar receita:', error);
-        alert('Erro ao salvar receita. Tente novamente.');
-      }
-    });
+    this.receitaService.salvarReceita(receitaRequest)
+      .pipe(
+        delay(5000),
+        finalize(() => {
+          this.salvandoReceita = false;
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Receita salva com sucesso:', response);
+          alert('Receita salva com sucesso!');
+          this.fecharModal();
+        },
+        error: (error) => {
+          console.error('Erro ao salvar receita:', error);
+          alert('Erro ao salvar receita. Tente novamente.');
+        }
+      });
   }
 
   private converterDataParaISO(dataTexto: string): string | null {

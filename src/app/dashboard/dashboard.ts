@@ -60,8 +60,7 @@ export class Dashboard implements OnInit {
       pagas: totalPaga,
       aPagar: resumo.despesa.totalPagar,
       saldoMesAtual: resumo.saldo.saldoMesAtual,
-      saldoAtual: resumo.saldo.saldoAtual,
-      saldoAnterior: 0
+      saldoAtual: resumo.saldo.saldoAtual
     };
   }
 
@@ -74,8 +73,7 @@ export class Dashboard implements OnInit {
       pagas: 0,
       aPagar: 0,
       saldoMesAtual: 0,
-      saldoAtual: 0,
-      saldoAnterior: 0
+      saldoAtual: 0
     };
   }
 
@@ -112,5 +110,4 @@ interface DadosFinanceiros {
 
   saldoMesAtual: number;
   saldoAtual: number;
-  saldoAnterior: number;
 }
