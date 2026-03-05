@@ -118,7 +118,7 @@ export class NovaConta {
     // Fazer chamada POST
     this.despesaService.salvarDespesa(despesaRequest)
       .pipe(
-        delay(5000),
+        delay(1000),
         finalize(() => {
           this.salvandoDespesa = false;
         })
